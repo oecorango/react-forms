@@ -1,22 +1,30 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { User, Users } from '../interfaces/state';
 
-const initialState = {
-  name: '',
-  age: 0,
-  email: '',
+const initialState: Users = {
+  users: [],
 };
-
 const noControlledSlice = createSlice({
   name: 'form no-controlled',
   initialState,
 
   reducers: {
-    setName(state, action: PayloadAction<string>) {
-      state.name = action.payload;
+    setUser(state, action: PayloadAction<User>) {
+      state.users.push({
+        name: action.payload.name,
+        age: action.payload.age,
+        email: action.payload.email,
+        password: action.payload.password,
+        confirmPassword: action.payload.confirmPassword,
+        gender: action.payload.gender,
+        terms: action.payload.terms,
+        country: action.payload.country,
+        image: action.payload.image,
+      });
     },
   },
 });
 
-export const { setName } = noControlledSlice.actions;
+export const { setUser } = noControlledSlice.actions;
 
 export default noControlledSlice.reducer;

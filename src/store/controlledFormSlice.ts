@@ -23,11 +23,6 @@ const controlledSlice = createSlice({
         image: action.payload.image,
       });
     },
-    // setImage(state, action: PayloadAction<User>) {
-    //   state.users.push({
-    //     image: action.payload.image,
-    //   });
-    // },
   },
 });
 

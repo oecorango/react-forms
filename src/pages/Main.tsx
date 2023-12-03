@@ -1,7 +1,14 @@
 import { useAppSelector } from '../hooks/redux';
 
 export const Main = (): JSX.Element => {
-  const state = useAppSelector((state) => state.controlledForm);
+  const usersFromControlledForm = useAppSelector(
+    (state) => state.controlledForm
+  );
+
+  const usersFromUnControlledForm = useAppSelector(
+    (state) => state.unControlledForm
+  );
+
   const styleParagraph = 'text-center';
   const styleColumn = 'flex flex-col items-center';
 
@@ -10,8 +17,8 @@ export const Main = (): JSX.Element => {
       <h1 className="mb-7 text-5xl text-center font-bold">main page</h1>
       <div className="grid grid-cols-2 gap-4">
         <div className={styleColumn}>
-          {state.users.length ? (
-            state.users.map((user, index) => {
+          {usersFromUnControlledForm.users.length ? (
+            usersFromUnControlledForm.users.map((user, index) => {
               return (
                 <div
                   className="h64 w-64 mb-4 p-5 border-2 rounded-lg"
@@ -45,8 +52,8 @@ export const Main = (): JSX.Element => {
         </div>
 
         <div className={styleColumn}>
-          {state.users.length ? (
-            state.users.map((user, index) => {
+          {usersFromControlledForm.users.length ? (
+            usersFromControlledForm.users.map((user, index) => {
               return (
                 <div
                   className="h64 w-64 mb-4 p-5 border-2 rounded-lg"
