@@ -2,11 +2,11 @@ import { useForm } from 'react-hook-form';
 import { useAppDispatch } from '../hooks/redux';
 import { setState } from '../store/controlledFormSlice';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import { User } from '../interfaces/state';
 import { COUNTRIES } from '../constants/common';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
+import { FormSchema } from '../shema/shema';
 
 export const FormControlled = (): JSX.Element => {
   const navigate = useNavigate();
@@ -14,19 +14,7 @@ export const FormControlled = (): JSX.Element => {
 
   const form = useForm({
     mode: 'onBlur',
-    resolver: yupResolver(
-      yup.object().shape({
-        name: yup.string().required(),
-        age: yup.string().required(),
-        email: yup.string().email().required(),
-        password: yup.string().required(),
-        confirmPassword: yup.string().required(),
-        gender: yup.string().required(),
-        country: yup.string().required(),
-        terms: yup.boolean().isTrue().required(),
-        image: yup.mixed().required(),
-      })
-    ),
+    resolver: yupResolver(FormSchema),
   });
 
   const { onBlur, name } = form.register('image');
@@ -37,9 +25,10 @@ export const FormControlled = (): JSX.Element => {
     navigate('/');
   };
 
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = (event: React.FocusEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
+      console.log(files);
       const urlImage = URL.createObjectURL(files[0]);
       form.setValue('image', urlImage);
     }
@@ -131,7 +120,7 @@ export const FormControlled = (): JSX.Element => {
               {`Confirm password: Error - ${form.formState.errors?.confirmPassword?.message}`}
             </p>
           ) : (
-            <p>Confirm password:</p>
+            <p>Confirm pass:</p>
           )}
         </label>
 
