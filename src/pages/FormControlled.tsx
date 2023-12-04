@@ -7,6 +7,7 @@ import { COUNTRIES } from '../constants/common';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import { FormSchema } from '../shema/shema';
+import { convertImage } from '../utils/convertImage';
 
 export const FormControlled = (): JSX.Element => {
   const navigate = useNavigate();
@@ -17,20 +18,20 @@ export const FormControlled = (): JSX.Element => {
     resolver: yupResolver(FormSchema),
   });
 
-  const { onBlur, name } = form.register('image');
-
-  const onSubmit = (data: User) => {
-    dispatch(setState(data));
+  const onSubmit = async (data: User) => {
+    const userData = data;
+    userData.image = await convertImage(userData.image as unknown as File);
+    dispatch(setState(userData));
     form.reset();
     navigate('/');
   };
 
-  const onChange = (event: React.FocusEvent<HTMLInputElement>) => {
+  const onChangeImage = (event: React.FocusEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
-      console.log(files);
-      const urlImage = URL.createObjectURL(files[0]);
-      form.setValue('image', urlImage);
+      const image = files[0];
+      form.setValue('image', image);
+      form.trigger('image');
     }
   };
 
@@ -166,9 +167,9 @@ export const FormControlled = (): JSX.Element => {
           className={inputStyle}
           type="file"
           accept=".png, .jpg, .jpeg"
-          onChange={onChange}
-          name={name}
-          onBlur={onBlur}
+          onChange={onChangeImage}
+          // name={name}
+          // onBlur={onBlur}
           required
         />
 

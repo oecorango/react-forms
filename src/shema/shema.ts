@@ -43,24 +43,23 @@ export const FormSchema = yup.object().shape({
 
   image: yup
     .mixed()
-    // .test('fileSize', 'The file is too large', (value) => {
-    //   return value
-    //     ? (value as File[]).length > 0 && (value as File[])[0].size <= 10000000
-    //     : false;
-    // })
-    // .test(
-    //   'type',
-    //   'Only the following formats are accepted: .jpeg, .jpg, .png',
-    //   (value) => {
-    //     return value
-    //       ? (value as File[]).length > 0 &&
-    //           value &&
-    //           ((value as File[])[0].type === 'image/jpeg' ||
-    //             (value as File[])[0].type === 'image/jpg' ||
-    //             (value as File[])[0].type === 'image/png')
-    //       : false;
-    //   }
-    // )
+    .test('fileSize', 'The file is too large', (value) => {
+      const file = value as File;
+      return file ? file.size <= 3000000 : false;
+    })
+    .test(
+      'type',
+      'Only the following formats are accepted: .jpeg, .jpg, .png',
+      (value) => {
+        const file = value as File;
+        return file
+          ? file &&
+              (file.type === 'image/jpeg' ||
+                file.type === 'image/jpg' ||
+                file.type === 'image/png')
+          : false;
+      }
+    )
     .required('You need to provide a file'),
 
   country: yup.string().required('the field must not be empty'),
