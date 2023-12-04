@@ -1,12 +1,24 @@
+import { FormEvent, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { COUNTRIES } from '../constants/common';
 import { useAppDispatch } from '../hooks/redux';
+import { setUser } from '../store/uncontrolledFormSlice';
 
 export const FormUncontrolled = (): JSX.Element => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  /* const onSubmit = (data: FormData) => {}; */
+  const nameInput = useRef<HTMLInputElement>();
+  const ageInput = useRef<HTMLInputElement>();
+  const emailInput = useRef<HTMLInputElement>();
+  const passInput = useRef<HTMLInputElement>();
+  const passConfirmInput = useRef<HTMLInputElement>();
+  const genderInput = useRef<HTMLInputElement>();
+  const imageInput = useRef<HTMLInputElement>();
+  const countryInput = useRef<HTMLInputElement>();
+  const termsInput = useRef<HTMLInputElement>();
+
+  const reSent = useRef();
 
   const errors = {
     name: '',
@@ -29,6 +41,38 @@ export const FormUncontrolled = (): JSX.Element => {
     }
   };
 
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault();
+    /*     if (
+      nameInput.current?.value &&
+      ageInput.current?.value &&
+      emailInput.current?.value &&
+      passInput.current?.value &&
+      passConfirmInput.current?.value &&
+      genderInput.current?.value &&
+      countryInput.current?.value &&
+      termsInput.current?.value &&
+      imageInput.current?.value
+    ) { */
+    const dataUser = {
+      name: nameInput.current?.value,
+      age: ageInput.current?.value,
+      email: emailInput.current?.value,
+      password: passInput.current?.value,
+      confirmPassword: passConfirmInput.current?.value,
+      gender: genderInput.current?.value,
+      country: countryInput.current?.value,
+      terms: termsInput.current?.value,
+      image: imageInput.current?.value,
+    };
+    console.log(dataUser);
+    dispatch(setUser(dataUser));
+    navigate('/');
+    /*  } */
+  };
+
+  // useEffect(() => {});
+
   const inputStyle = 'mt-1 mb-4 border-2 rounded-lg p-1';
   const buttonStyle =
     'm-auto w-64 mt-2 border-2 rounded-lg p-1 bg-teal-300 hover:bg-teal-400 disabled:bg-teal-50 ease-linear transition-all';
@@ -37,7 +81,8 @@ export const FormUncontrolled = (): JSX.Element => {
     <>
       <form
         className="flex flex-col w-2/5 m-auto"
-        action="submit" /* onSubmit={} */
+        action="submit"
+        onSubmit={handleSubmit}
       >
         <label>
           {errors.name ? (
@@ -54,6 +99,7 @@ export const FormUncontrolled = (): JSX.Element => {
           type="text"
           placeholder={'enter your name'}
           required
+          ref={nameInput}
         />
 
         <label>
@@ -68,6 +114,7 @@ export const FormUncontrolled = (): JSX.Element => {
           className={inputStyle}
           type="text"
           placeholder={'enter your age'}
+          ref={ageInput}
           required
         />
 
@@ -86,6 +133,7 @@ export const FormUncontrolled = (): JSX.Element => {
           type="text"
           placeholder={'enter your email'}
           required
+          ref={emailInput}
         />
 
         <label>
@@ -103,6 +151,7 @@ export const FormUncontrolled = (): JSX.Element => {
           type="password"
           placeholder={'enter your password'}
           autoComplete=""
+          ref={passInput}
           required
         />
 
@@ -121,6 +170,7 @@ export const FormUncontrolled = (): JSX.Element => {
           type="password"
           placeholder={'confirm your password'}
           autoComplete=""
+          ref={passConfirmInput}
           required
         />
 
@@ -134,7 +184,12 @@ export const FormUncontrolled = (): JSX.Element => {
           )}
         </label>
 
-        <select className={inputStyle} defaultValue="" required>
+        <select
+          className={inputStyle}
+          ref={genderInput}
+          defaultValue=""
+          required
+        >
           <option value="" disabled>
             enter your gender
           </option>
@@ -155,6 +210,7 @@ export const FormUncontrolled = (): JSX.Element => {
           type="file"
           accept=".png, .jpg, .jpeg"
           onChange={onChange}
+          ref={imageInput}
           required
         />
 
@@ -168,7 +224,12 @@ export const FormUncontrolled = (): JSX.Element => {
           )}
         </label>
 
-        <select className={inputStyle} defaultValue="" required>
+        <select
+          className={inputStyle}
+          ref={countryInput}
+          defaultValue=""
+          required
+        >
           <option value="" disabled>
             enter your country
           </option>
@@ -185,8 +246,8 @@ export const FormUncontrolled = (): JSX.Element => {
           ) : (
             <p>Click here:</p>
           )}
-          <input className="mt-1 mb-5 mr-3" type="checkbox" />Я принимаю
-          лецензионное соглашение
+          <input className="mt-1 mb-5 mr-3" ref={termsInput} type="checkbox" />Я
+          принимаю лецензионное соглашение
         </label>
 
         <button className={buttonStyle} type="submit" /* disabled={} */>

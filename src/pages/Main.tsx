@@ -14,7 +14,7 @@ export const Main = (): JSX.Element => {
 
   return (
     <>
-      <h1 className="mb-7 text-5xl text-center font-bold">main page</h1>
+      <h1 className="mb-7 text-5xl text-center font-bold">USERS:</h1>
       <div className="grid grid-cols-2 gap-4">
         <div className={styleColumn}>
           {usersFromUnControlledForm.users.length ? (
