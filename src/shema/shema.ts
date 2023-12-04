@@ -17,7 +17,7 @@ export const FormSchema = yup.object().shape({
 
   age: yup
     .number()
-    .min(1, 'min 1')
+    .min(14, 'min 14')
     .typeError('field must be a number')
     .required('the field must not be empty'),
 

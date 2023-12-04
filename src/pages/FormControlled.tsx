@@ -60,6 +60,7 @@ export const FormControlled = (): JSX.Element => {
           className={inputStyle}
           type="text"
           placeholder={'enter your name'}
+          autoComplete="on"
           {...form.register('name')}
         />
 
@@ -77,6 +78,7 @@ export const FormControlled = (): JSX.Element => {
           className={inputStyle}
           type="text"
           placeholder={'enter your age'}
+          autoComplete="on"
           {...form.register('age')}
         />
 
@@ -94,6 +96,7 @@ export const FormControlled = (): JSX.Element => {
           className={inputStyle}
           type="text"
           placeholder={'enter your email'}
+          autoComplete="on"
           {...form.register('email')}
         />
 
@@ -111,7 +114,7 @@ export const FormControlled = (): JSX.Element => {
           className={inputStyle}
           type="password"
           placeholder={'enter your password'}
-          autoComplete=""
+          autoComplete="new-password"
           {...form.register('password')}
         />
 
@@ -129,7 +132,7 @@ export const FormControlled = (): JSX.Element => {
           className={inputStyle}
           type="password"
           placeholder={'confirm your password'}
-          autoComplete=""
+          autoComplete="new-password"
           {...form.register('confirmPassword')}
         />
 
@@ -146,6 +149,7 @@ export const FormControlled = (): JSX.Element => {
         <select
           className={inputStyle}
           defaultValue=""
+          autoComplete="on"
           {...form.register('gender')}
         >
           <option value="" disabled>
@@ -168,9 +172,7 @@ export const FormControlled = (): JSX.Element => {
           type="file"
           accept=".png, .jpg, .jpeg"
           onChange={onChangeImage}
-          // name={name}
-          // onBlur={onBlur}
-          required
+          autoComplete="on"
         />
 
         <label>
@@ -186,6 +188,7 @@ export const FormControlled = (): JSX.Element => {
         <select
           className={inputStyle}
           defaultValue=""
+          autoComplete="on"
           {...form.register('country')}
         >
           <option value="" disabled>

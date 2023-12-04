@@ -72,7 +72,7 @@ export const FormUncontrolled = (): JSX.Element => {
           type="text"
           placeholder={'enter your name'}
           name="firstName"
-          // required
+          autoComplete="on"
         />
 
         <label>
@@ -88,7 +88,7 @@ export const FormUncontrolled = (): JSX.Element => {
           type="text"
           placeholder={'enter your age'}
           name="age"
-          // required
+          autoComplete="on"
         />
 
         <label>
@@ -106,7 +106,7 @@ export const FormUncontrolled = (): JSX.Element => {
           type="text"
           placeholder={'enter your email'}
           name="email"
-          // required
+          autoComplete="on"
         />
 
         <label>
@@ -123,9 +123,8 @@ export const FormUncontrolled = (): JSX.Element => {
           className={inputStyle}
           type="password"
           placeholder={'enter your password'}
-          autoComplete=""
           name="password"
-          // required
+          autoComplete="new-password"
         />
 
         <label>
@@ -142,9 +141,8 @@ export const FormUncontrolled = (): JSX.Element => {
           className={inputStyle}
           type="password"
           placeholder={'confirm your password'}
-          autoComplete=""
           name="confirmPassword"
-          // required
+          autoComplete="new-password"
         />
 
         <label>
@@ -161,7 +159,7 @@ export const FormUncontrolled = (): JSX.Element => {
           className={inputStyle}
           defaultValue=""
           name="gender"
-          // required
+          autoComplete="on"
         >
           <option value="" disabled>
             enter your gender
@@ -184,7 +182,6 @@ export const FormUncontrolled = (): JSX.Element => {
           accept=".png, .jpg, .jpeg"
           name="image"
           onChange={onChange}
-          // required
         />
 
         <label>
@@ -201,7 +198,7 @@ export const FormUncontrolled = (): JSX.Element => {
           className={inputStyle}
           defaultValue=""
           name="country"
-          // required
+          autoComplete="on"
         >
           <option value="" disabled>
             enter your country
@@ -219,8 +216,13 @@ export const FormUncontrolled = (): JSX.Element => {
           ) : (
             <p>Click here:</p>
           )}
-          <input className="mt-1 mb-5 mr-3" type="checkbox" name="terms" />Я
-          принимаю лецензионное соглашение
+          <input
+            className="mt-1 mb-5 mr-3"
+            type="checkbox"
+            name="terms"
+            autoComplete="on"
+          />
+          Я принимаю лецензионное соглашение
         </label>
 
         <button className={buttonStyle} type="submit">
