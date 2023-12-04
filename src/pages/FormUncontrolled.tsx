@@ -1,36 +1,17 @@
-import { FormEvent, useEffect, useRef } from 'react';
+import { FormEvent, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { COUNTRIES } from '../constants/common';
 import { useAppDispatch } from '../hooks/redux';
 import { setUser } from '../store/uncontrolledFormSlice';
+import { User, UserErrors } from '../interfaces/state';
+import { convertImage } from '../utils/convertImage';
 
 export const FormUncontrolled = (): JSX.Element => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const nameInput = useRef<HTMLInputElement>();
-  const ageInput = useRef<HTMLInputElement>();
-  const emailInput = useRef<HTMLInputElement>();
-  const passInput = useRef<HTMLInputElement>();
-  const passConfirmInput = useRef<HTMLInputElement>();
-  const genderInput = useRef<HTMLInputElement>();
-  const imageInput = useRef<HTMLInputElement>();
-  const countryInput = useRef<HTMLInputElement>();
-  const termsInput = useRef<HTMLInputElement>();
-
-  const reSent = useRef();
-
-  const errors = {
-    name: '',
-    age: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    gender: '',
-    country: '',
-    terms: '',
-    image: '',
-  };
+  const formRef = useRef<HTMLFormElement>(null);
+  const [formFieldErrors, setFormFieldErrors] = useState<UserErrors>();
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -41,37 +22,28 @@ export const FormUncontrolled = (): JSX.Element => {
     }
   };
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    /*     if (
-      nameInput.current?.value &&
-      ageInput.current?.value &&
-      emailInput.current?.value &&
-      passInput.current?.value &&
-      passConfirmInput.current?.value &&
-      genderInput.current?.value &&
-      countryInput.current?.value &&
-      termsInput.current?.value &&
-      imageInput.current?.value
-    ) { */
-    const dataUser = {
-      name: nameInput.current?.value,
-      age: ageInput.current?.value,
-      email: emailInput.current?.value,
-      password: passInput.current?.value,
-      confirmPassword: passConfirmInput.current?.value,
-      gender: genderInput.current?.value,
-      country: countryInput.current?.value,
-      terms: termsInput.current?.value,
-      image: imageInput.current?.value,
-    };
-    console.log(dataUser);
-    dispatch(setUser(dataUser));
-    navigate('/');
-    /*  } */
-  };
 
-  // useEffect(() => {});
+    const userData: User = {
+      name: formRef.current?.firstName.value,
+      age: formRef.current?.age.value,
+      email: formRef.current?.email.value,
+      password: formRef.current?.password.value,
+      confirmPassword: formRef.current?.confirmPassword.value,
+      gender: formRef.current?.confirmPassword.value,
+      country: formRef.current?.country.value,
+      terms: formRef.current?.terms.checked,
+      image: formRef.current?.image.files
+        ? formRef.current?.image.files[0]
+        : undefined,
+    };
+
+    userData.image = await convertImage(userData.image as unknown as File);
+
+    dispatch(setUser(userData));
+    navigate('/');
+  };
 
   const inputStyle = 'mt-1 mb-4 border-2 rounded-lg p-1';
   const buttonStyle =
@@ -83,11 +55,12 @@ export const FormUncontrolled = (): JSX.Element => {
         className="flex flex-col w-2/5 m-auto"
         action="submit"
         onSubmit={handleSubmit}
+        ref={formRef}
       >
         <label>
-          {errors.name ? (
+          {formFieldErrors?.name ? (
             <p className="text-red-700">
-              {`Your name: Error - ${errors.name}`}
+              {`Your name: Error - ${formFieldErrors.name}`}
             </p>
           ) : (
             <p>Your name:</p>
@@ -98,13 +71,13 @@ export const FormUncontrolled = (): JSX.Element => {
           className={inputStyle}
           type="text"
           placeholder={'enter your name'}
-          required
-          ref={nameInput}
+          name="firstName"
+          // required
         />
 
         <label>
-          {errors.age ? (
-            <p className="text-red-700">{`Your age: Error - ${errors.age}`}</p>
+          {formFieldErrors?.age ? (
+            <p className="text-red-700">{`Your age: Error - ${formFieldErrors.age}`}</p>
           ) : (
             <p>Your age:</p>
           )}
@@ -114,14 +87,14 @@ export const FormUncontrolled = (): JSX.Element => {
           className={inputStyle}
           type="text"
           placeholder={'enter your age'}
-          ref={ageInput}
-          required
+          name="age"
+          // required
         />
 
         <label>
-          {errors.email ? (
+          {formFieldErrors?.email ? (
             <p className="text-red-700">
-              {`Your e-mail: Error - ${errors.email}`}
+              {`Your e-mail: Error - ${formFieldErrors.email}`}
             </p>
           ) : (
             <p>Your e-mail:</p>
@@ -132,14 +105,14 @@ export const FormUncontrolled = (): JSX.Element => {
           className={inputStyle}
           type="text"
           placeholder={'enter your email'}
-          required
-          ref={emailInput}
+          name="email"
+          // required
         />
 
         <label>
-          {errors.password ? (
+          {formFieldErrors?.password ? (
             <p className="text-red-700">
-              {`Password: Error - ${errors.password}`}
+              {`Password: Error - ${formFieldErrors.password}`}
             </p>
           ) : (
             <p>Password:</p>
@@ -151,14 +124,14 @@ export const FormUncontrolled = (): JSX.Element => {
           type="password"
           placeholder={'enter your password'}
           autoComplete=""
-          ref={passInput}
-          required
+          name="password"
+          // required
         />
 
         <label>
-          {errors.confirmPassword ? (
+          {formFieldErrors?.confirmPassword ? (
             <p className="text-red-700">
-              {`Confirm password: Error - ${errors.confirmPassword}`}
+              {`Confirm password: Error - ${formFieldErrors.confirmPassword}`}
             </p>
           ) : (
             <p>Confirm pass:</p>
@@ -170,14 +143,14 @@ export const FormUncontrolled = (): JSX.Element => {
           type="password"
           placeholder={'confirm your password'}
           autoComplete=""
-          ref={passConfirmInput}
-          required
+          name="confirmPassword"
+          // required
         />
 
         <label>
-          {errors.gender ? (
+          {formFieldErrors?.gender ? (
             <p className="text-red-700">
-              {`Your gender: Error - ${errors.gender}`}
+              {`Your gender: Error - ${formFieldErrors.gender}`}
             </p>
           ) : (
             <p>Your gender:</p>
@@ -186,9 +159,9 @@ export const FormUncontrolled = (): JSX.Element => {
 
         <select
           className={inputStyle}
-          ref={genderInput}
           defaultValue=""
-          required
+          name="gender"
+          // required
         >
           <option value="" disabled>
             enter your gender
@@ -198,8 +171,8 @@ export const FormUncontrolled = (): JSX.Element => {
         </select>
 
         <label>
-          {errors?.image ? (
-            <p className="text-red-700">{`Click here: Error - ${errors.image}`}</p>
+          {formFieldErrors?.image ? (
+            <p className="text-red-700">{`Click here: Error - ${formFieldErrors.image}`}</p>
           ) : (
             <p>Your image:</p>
           )}
@@ -209,15 +182,15 @@ export const FormUncontrolled = (): JSX.Element => {
           className={inputStyle}
           type="file"
           accept=".png, .jpg, .jpeg"
+          name="image"
           onChange={onChange}
-          ref={imageInput}
-          required
+          // required
         />
 
         <label>
-          {errors.country ? (
+          {formFieldErrors?.country ? (
             <p className="text-red-700">
-              {`Your country: Error - ${errors.country}`}
+              {`Your country: Error - ${formFieldErrors.country}`}
             </p>
           ) : (
             <p>Your country:</p>
@@ -226,9 +199,9 @@ export const FormUncontrolled = (): JSX.Element => {
 
         <select
           className={inputStyle}
-          ref={countryInput}
           defaultValue=""
-          required
+          name="country"
+          // required
         >
           <option value="" disabled>
             enter your country
@@ -241,16 +214,16 @@ export const FormUncontrolled = (): JSX.Element => {
         </select>
 
         <label>
-          {errors.terms ? (
-            <p className="text-red-700">{`Click here: Error - ${errors.terms}`}</p>
+          {formFieldErrors?.terms ? (
+            <p className="text-red-700">{`Click here: Error - ${formFieldErrors.terms}`}</p>
           ) : (
             <p>Click here:</p>
           )}
-          <input className="mt-1 mb-5 mr-3" ref={termsInput} type="checkbox" />Я
+          <input className="mt-1 mb-5 mr-3" type="checkbox" name="terms" />Я
           принимаю лецензионное соглашение
         </label>
 
-        <button className={buttonStyle} type="submit" /* disabled={} */>
+        <button className={buttonStyle} type="submit">
           Save
         </button>
       </form>
