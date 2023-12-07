@@ -1,12 +1,18 @@
-import { useState } from 'react';
+import { Route, Routes } from 'react-router';
+import { Main } from './pages/Main';
+import { Layout } from './layouts/Layout';
+import { FormControlled } from './pages/FormControlled';
+import { FormUncontrolled } from './pages/FormUncontrolled';
 
 function App(): JSX.Element {
-  const [count, setCount] = useState(0);
-
   return (
-    <>
-      <p>Click on the Vite and React logos to learn more</p>
-    </>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Main />} />
+        <Route path="/form-controlled" element={<FormControlled />} />
+        <Route path="/form-uncontrolled" element={<FormUncontrolled />} />
+      </Route>
+    </Routes>
   );
 }
 
